@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Three.js Example</title>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.136.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.136.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.136.0/examples/js/loaders/GLTFLoader.js"></script>
+  </head>
+  <body>
+    <script>
+      // Your Three.js code goes here
+      const scene = new THREE.Scene()
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000,
+      )
+
+      // Create the renderer
+      const renderer = new THREE.WebGLRenderer()
+      renderer.setSize(window.innerWidth, window.innerHeight)
+      document.body.appendChild(renderer.domElement)
+
+      const controls = new THREE.OrbitControls(camera, renderer.domElement)
+      controls.update()
+
+      const loader = new THREE.GLTFLoader()
+      loader.load('path/to/model.gltf', function (gltf) {
+        scene.add(gltf.scene)
+      })
+
+      // Create a cube
+      const geometry = new THREE.BoxGeometry()
+      const material = new THREE.MeshBasicMaterial({ color: 0xffffff })
+      const cube = new THREE.Mesh(geometry, material)
+      scene.add(cube)
+
+      // Create a custom shader material
+      const vertexShader = `
+  // Your vertex shader code goes here
+`
+
+      const fragmentShader = `
+  // Your fragment shader code goes here
+`
+
+      const customMaterial = new THREE.ShaderMaterial({
+        uniforms: {
+          // Define your uniforms here
+        },
+        vertexShader,
+        fragmentShader,
+      })
+
+      // Replace the cube's material with the custom material
+      cube.material = customMaterial
+
+      // Set up the camera position and orbit controls
+      camera.position.z = 5
+      controls.update()
+
+      // Render the scene
+      function animate() {
+        requestAnimationFrame(animate)
+        renderer.render(scene, camera)
+        controls.update()
+      }
+      animate()
+    </script>
+  </body>
+</html>
